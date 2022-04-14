@@ -5,14 +5,31 @@ library(testthat)
 # you can have multiple tests for each question
 
 
-test_that("Q5 (visible)", {
+test_that("Q2 (visible)", {
   
-  expect_true(is.factor(Majors$Major))
-  expect_true(is.ordered(Majors$Major))
-  
+  expect_true(dim(rep1)[1] == 10)
+  expect_true(dim(rep1)[2] == 26)
+  expect_equal(rep1$DMA_ID[1], 501)
+  expect_equal(rep1$DMA_CONDITION[3], "3")
+  expect_equal(rep1$GOOGLE_RETARGETING_CLICKS[6], 11)
+
 })
 
-test_that("Q8 (visible)", {
+test_that("Q3a (visible)", {
+  
+  expect_true(names(fexp)[27] == "Tot_Imp")
+  expect_true(sum(fexp$Tot_Imp) == 13184393)
+              
+})
+  
+test_that("Q3b (visible)", {
+    
+  expect_true(names(fexp)[28] == "Tot_Click")
+  expect_equal(sum(fexp$Tot_Click), 66802, tolerance = 1)
+                
+})
+    
+    test_that("Q8 (visible)", {
   
   expect_equal(summMaj[1,1], "Min.   :19.26  ") 
   expect_equal(summMaj[2,1], "1st Qu.:21.43  ") 
