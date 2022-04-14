@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Set up autograder files
+
+cp /autograder/submission/Lesson_3_Assignment_Introduction_to_the_Tidyverse.R /autograder/source/Lesson_3_Assignment_Introduction_to_the_Tidyverse.R
+
+cd /autograder/source
+
+
+Rscript grade_one_submission.r 
