@@ -1,5 +1,5 @@
 
-# Lesson 2 Assignment - Introduction to the Tidyverse
+# Lesson 3 Assignment - Introduction to the Tidyverse
 
 # Your assignment is to write the commands instructed in the comments below. To run your
 # commands, simply hit Ctrl+Enter (command+return on a MAC) when the cursor is on that 
@@ -10,10 +10,10 @@
 # The data we'll be working with comes from a company that sells furniture all over the 
 # country, both on its website and through Amazon. The dataset fexp contains data on its 
 # advertising and sales from a three-week period, from November 4 to November 24, 2019.
-# The data should be loaded in the Environment to the right. If it is not, run the three 
+# The data should be loaded in the Environment to the right. If it is not, run the four 
 # lines of code below to read in the data and format it as a data frame.
 
-# Do not change these three lines or GradeScope will not work
+# Do not change these four lines or GradeScope will not work
 library(readxl)
 fexp <- read_excel("FieldExperiment.xlsx")
 fexp <- data.frame(fexp)
