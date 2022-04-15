@@ -10,14 +10,17 @@
 # The data we'll be working with comes from a company that sells furniture all over the 
 # country, both on its website and through Amazon. The dataset fexp contains data on its 
 # advertising and sales from a three-week period, from November 4 to November 24, 2019.
-# The data should be loaded in the Environment to the right. If it is not, run the four 
+# The data should be loaded in the Environment to the right. If it is not, run the six 
 # lines of code below to read in the data and format it as a data frame.
 
-# Do not change these four lines or GradeScope will not work
+# Do not change these six lines or GradeScope will not work
 library(readxl)
+library(dplyr)
+library(ggplot2)
 fexp <- read_excel("FieldExperiment.xlsx")
 fexp <- data.frame(fexp)
 fexp$DATE <- as.Date(fexp$DATE)
+fexp$WEEK <- factor(fexp$WEEK)
 
 #1. Take a look at the structure of the data.
 str(fexp)
@@ -120,26 +123,74 @@ rep2d <- fexp %>%
 
 #11. Using fexp, the original data, create a scatter plot with Amazon Sales on the x-axis 
 # and website sales on the y-axis.
+ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
+  geom_point()
 
+Q11p <- ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
+  geom_point()
 
 # The outliers obscure the real relationship. 
 
 #12. Create the same plot, but put both axes on a log scale. 
 # (https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-visualization?ex=7)
+ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
+Q12p <- ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
 #The log of 0 is negative infinity, so R gave us warnings. 
 
 #13. To get rid of (most of) these problematic zeroes, we'll have to alter the fexp data. 
 # Filter out any DMA's with populations under 500,000. Instead of plotting daily sales from 
-# each region, plot the weekly sales of each region. (In other words, start with the first 
-# lines of code from questions 8 through 10, but change the filter number to 500000. Then pipe 
-# that data into the *ggplot()* command.) Keep both axes on the log scale.
+# each region, plot the weekly sales of each region. (In other words, start with the code 
+# from question 8, but change the filter number to 500000. Then pipe that data into the 
+# *ggplot()* command.) Keep both axes on the log scale.
+fexp %>% 
+  filter(POPN > 500000) %>% 
+  group_by(WEEK, DMA_NAME) %>% 
+  summarize(WebSales = sum(SHOPIFY_US_SALES),
+            AmznSales = sum(AMAZON_US_SALES)) %>% 
+  ggplot(aes(x = AmznSales, y = WebSales)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
+Q13p <- fexp %>% 
+  filter(POPN > 500000) %>% 
+  group_by(WEEK, DMA_NAME) %>% 
+  summarize(WebSales = sum(SHOPIFY_US_SALES),
+            AmznSales = sum(AMAZON_US_SALES)) %>% 
+  ggplot(aes(x = AmznSales, y = WebSales)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
 #14. Create the same plot, but color the dots by week. 
 # (https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-visualization?ex=9)
+fexp %>% 
+  filter(POPN > 500000) %>% 
+  group_by(WEEK, DMA_NAME) %>% 
+  summarize(WebSales = sum(SHOPIFY_US_SALES),
+            AmznSales = sum(AMAZON_US_SALES)) %>% 
+  ggplot(aes(x = AmznSales, y = WebSales, color = WEEK)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
+Q14p <-  fexp %>% 
+  filter(POPN > 500000) %>% 
+  group_by(WEEK, DMA_NAME) %>% 
+  summarize(WebSales = sum(SHOPIFY_US_SALES),
+            AmznSales = sum(AMAZON_US_SALES)) %>% 
+  ggplot(aes(x = AmznSales, y = WebSales, color = WEEK)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
 
 #15. Let's take a look at how sales are evolving over time. Create a line plot of daily 
 # website sales in New York. Give it the title "Daily Website Sales - New York".

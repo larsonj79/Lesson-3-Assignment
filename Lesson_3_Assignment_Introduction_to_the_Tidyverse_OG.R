@@ -10,14 +10,17 @@
 # The data we'll be working with comes from a company that sells furniture all over the 
 # country, both on its website and through Amazon. The dataset fexp contains data on its 
 # advertising and sales from a three-week period, from November 4 to November 24, 2019.
-# The data should be loaded in the Environment to the right. If it is not, run the four 
+# The data should be loaded in the Environment to the right. If it is not, run the six 
 # lines of code below to read in the data and format it as a data frame.
 
-# Do not change these four lines or GradeScope will not work
+# Do not change these six lines or GradeScope will not work
 library(readxl)
+library(dplyr)
+library(ggplot2)
 fexp <- read_excel("FieldExperiment.xlsx")
 fexp <- data.frame(fexp)
 fexp$DATE <- as.Date(fexp$DATE)
+fexp$WEEK <- factor(fexp$WEEK)
 
 #1. Take a look at the structure of the data.
 
@@ -98,9 +101,9 @@ fexp$DATE <- as.Date(fexp$DATE)
 
 #13. To get rid of (most of) these problematic zeroes, we'll have to alter the fexp data. 
 # Filter out any DMA's with populations under 500,000. Instead of plotting daily sales from 
-# each region, plot the weekly sales of each region. (In other words, start with the first 
-# lines of code from questions 8 through 10, but change the filter number to 500000. Then pipe 
-# that data into the *ggplot()* command.) Keep both axes on the log scale.
+# each region, plot the weekly sales of each region. (In other words, start with the code 
+# from question 8, but change the filter number to 500000. Then pipe that data into the 
+# *ggplot()* command.) Keep both axes on the log scale.
 
 
 #14. Create the same plot, but color the dots by week. 

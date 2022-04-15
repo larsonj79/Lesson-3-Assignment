@@ -91,3 +91,13 @@ test_that("Q10 (visible)", {
   
 })
 
+test_that("Q11 (visible)", {
+  
+  expect_true(Q11p == 15)
+  expect_true(dim(rep2d)[2] == 5)
+  expect_true(names(rep2d)[5] == "PercAmzn")
+  expect_equal(rep2d$PercAmzn[3], .0518, tolerance = 1e-3) 
+  expect_equal(rep2d$PercAmzn[6], .0597, tolerance = 1e-3) 
+  expect_equal(rep2d$PercAmzn[13], .0363, tolerance = 1e-3) 
+  
+})
