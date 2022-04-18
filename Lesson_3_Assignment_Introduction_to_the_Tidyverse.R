@@ -46,13 +46,14 @@ rep1b <- fexp %>%
 #We want to calculate the total number of impressions and clicks that occurred on 
 # the first day in each of the ten regions with the largest population. 
 
-#4. Add to the fexp data frame the variable Tot_Imp, which should be a sum of 
-# GOOGLE_PROSPECTING_IMPRESSIONS, GOOGLE_RETARGETING_IMPRESSIONS, 
-# GOOGLE_BRAND_IMPRESSIONS, FACEBOOK_PROSPECTING_IMPRESSIONS, 
-# and FACEBOOK_RETARGETING_IMPRESSIONS. Also add the variable Tot_Click, which should 
-# be a sum of GOOGLE_PROSPECTING_CLICKS, GOOGLE_RETARGETING_CLICKS, 
-# GOOGLE_BRAND_CLICKS, FACEBOOK_PROSPECTING_CLICKS, and FACEBOOK_RETARGETING_CLICKS.
-fexp <- fexp %>% 
+#4. Create a data frame called fexp4 that starts with fexp and adds the variable 
+# Tot_Imp (total impressions), which should be a sum of GOOGLE_PROSPECTING_IMPRESSIONS, 
+# GOOGLE_RETARGETING_IMPRESSIONS, GOOGLE_BRAND_IMPRESSIONS, 
+# FACEBOOK_PROSPECTING_IMPRESSIONS, and FACEBOOK_RETARGETING_IMPRESSIONS. Also add 
+# the variable Tot_Click, which should be a sum of GOOGLE_PROSPECTING_CLICKS, 
+# GOOGLE_RETARGETING_CLICKS, GOOGLE_BRAND_CLICKS, FACEBOOK_PROSPECTING_CLICKS, and 
+# FACEBOOK_RETARGETING_CLICKS.
+fexp4 <- fexp %>% 
   mutate(Tot_Imp = GOOGLE_PROSPECTING_IMPRESSIONS + GOOGLE_RETARGETING_IMPRESSIONS +
            GOOGLE_BRAND_IMPRESSIONS + FACEBOOK_PROSPECTING_IMPRESSIONS +
            FACEBOOK_RETARGETING_IMPRESSIONS,
@@ -63,10 +64,10 @@ fexp <- fexp %>%
 
 #5. Now that you have total impressions and clicks, you can calculate the overall 
 # click-through rate for each region. (Click-through rate is the percentage of impressions 
-# that led to clicks.) Add to the fexp data frame the variable CTR that shows each region's 
-# click-through rate. Multiply by 100 so it is displayed in percent. Sort this data by 
-# click-through rate in descending order.
-fexp <- fexp %>% 
+# that led to clicks.) Create a data frame fexp5 which starts with fexp4 and adds the 
+# variable CTR that shows each region's click-through rate. Multiply by 100 so it is 
+# displayed in percent. Sort this data by click-through rate in descending order.
+fexp5 <- fexp4 %>% 
   mutate(CTR = Tot_Click / Tot_Imp * 100) %>% 
   arrange(desc(CTR))
 
@@ -118,11 +119,14 @@ rep2d <- fexp %>%
 
 
 # Tidyverse Plot Practice
+# For Each of the next 10 questions, you will be creating a plot using ggplot2. 
+# For each question, you will create the plot, and then you will have to save that 
+# plot as an R object. The code for Question 11 has been provided for you.
 
 # We want to see how sales on the website are related to Amazon sales. 
 
 #11. Using fexp, the original data, create a scatter plot with Amazon Sales on the x-axis 
-# and website sales on the y-axis.
+# and website sales on the y-axis. Save it as Q11p.
 ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
   geom_point()
 
@@ -131,7 +135,7 @@ Q11p <- ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
 
 # The outliers obscure the real relationship. 
 
-#12. Create the same plot, but put both axes on a log scale. 
+#12. Create the same plot, but put both axes on a log scale. Save it as Q12p.
 # (https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-visualization?ex=7)
 ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
   geom_point() +
@@ -149,7 +153,7 @@ Q12p <- ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
 # Filter out any DMA's with populations under 500,000. Instead of plotting daily sales from 
 # each region, plot the weekly sales of each region. (In other words, start with the code 
 # from question 8, but change the filter number to 500000. Then pipe that data into the 
-# *ggplot()* command.) Keep both axes on the log scale.
+# *ggplot()* command.) Keep both axes on the log scale. Save all the code as Q13p.
 fexp %>% 
   filter(POPN > 500000) %>% 
   group_by(WEEK, DMA_NAME) %>% 
@@ -170,7 +174,7 @@ Q13p <- fexp %>%
   scale_x_log10() +
   scale_y_log10()
 
-#14. Create the same plot, but color the dots by week. 
+#14. Create the same plot, but color the dots by week. Save it as Q14p.
 # (https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-visualization?ex=9)
 fexp %>% 
   filter(POPN > 500000) %>% 
@@ -193,29 +197,102 @@ Q14p <-  fexp %>%
   scale_y_log10()
 
 #15. Let's take a look at how sales are evolving over time. Create a line plot of daily 
-# website sales in New York. Give it the title "Daily Website Sales - New York".
+# website sales in New York. Give it the title "Daily Website Sales - New York". Save it
+# as Q15p.
+fexp %>% 
+  filter(DMA_NAME == "New York, NY") %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
+  geom_line()
 
+Q15p <- fexp %>% 
+  filter(DMA_NAME == "New York, NY") %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
+  geom_line()
 
 #16. Create that same line plot, but show the daily website sales of the 5 most-populous 
-# DMAs, with a different color for each DMA (use DMA_NAME).
+# DMAs, with a different color for each DMA (use DMA_NAME). Save it as Q16p.
+fexp %>% 
+  filter(POPN > 2500000) %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES, color = DMA_NAME)) +
+  geom_line()
 
+Q16p <- fexp %>% 
+  filter(POPN > 2500000) %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES, color = DMA_NAME)) +
+  geom_line()
 
 #17. Now let's look at daily sales of the top 20 DMAs (POPN > 1,300,000). This plot will 
-# get too messy, so create a different plot for each DMA (use DMA_NAME). 
+# get too messy, so create a different plot for each DMA (use DMA_NAME). Save it as Q17p.
 # (https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-visualization?ex=13)
+fexp %>% 
+  filter(POPN > 1300000) %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
+  geom_line() +
+  facet_wrap(~ DMA_NAME)
 
+Q17p <- fexp %>% 
+  filter(POPN > 1300000) %>% 
+  ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
+  geom_line() +
+  facet_wrap(~ DMA_NAME)
 
 #18. Now let's compare total sales by DMA. Create a bar plot showing total website sales 
-# (across all three weeks) for the top 20 DMAs.
+# (across all three weeks) for the top 20 DMAs. Label the sales variable Tot_Sales. Save
+# it as Q18p.
+fexp %>% 
+  filter(POPN > 1300000) %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = DMA_NAME, y = Tot_Sales)) +
+  geom_col()
 
+Q18p <- fexp %>% 
+  filter(POPN > 1300000) %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = DMA_NAME, y = Tot_Sales)) +
+  geom_col()
 
 #19. Let's examine the distribution of total website sales across all 210 DMAs. Create a 
-# histogram of the total website sales of each DMA.
+# histogram of the total website sales of each DMA. Label the sales variable Tot_Sales.
+# Save it as Q19p.
+fexp %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = Tot_Sales)) +
+  geom_histogram()
 
+Q19p <- fexp %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = Tot_Sales)) +
+  geom_histogram()
 
-#20. Create that same histogram, but this time apply a log scale to the x-axis.
+#20. Create that same histogram, but this time apply a log scale to the x-axis. (Label
+# the sales variable Tot_Sales, as before.) Save it as Q20p.
+fexp %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = Tot_Sales)) +
+  geom_histogram() +
+  scale_x_log10()
 
+Q20p <- fexp %>% 
+  group_by(DMA_NAME) %>% 
+  summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
+  ggplot(aes(x = Tot_Sales)) +
+  geom_histogram() +
+  scale_x_log10()
 
 #21. Now we'd like to take a look at the distribution of daily Amazon sales for the top 8 
 # DMAs (POPN > 2,400,000). Create boxplots showing the distribution of daily sales for the 
-# top 8 DMAs.
+# top 8 DMAs. Save it as Q21p.
+fexp %>% 
+  filter(POPN > 2400000) %>% 
+  ggplot(aes(x = DMA_NAME, y = AMAZON_US_SALES)) +
+  geom_boxplot()
+
+Q21p <- fexp %>% 
+  filter(POPN > 2400000) %>% 
+  ggplot(aes(x = DMA_NAME, y = AMAZON_US_SALES)) +
+  geom_boxplot()
