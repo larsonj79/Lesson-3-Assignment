@@ -7,11 +7,10 @@ library(testthat)
 library(readxl)
 library(dplyr)
 library(ggplot2)
-fexp <- read_excel("FieldExperiment.xlsx")
-fexp <- data.frame(fexp)
-fexp$DATE <- as.Date(fexp$DATE)
-fexp$WEEK <- factor(fexp$WEEK)
-
+fexpkey <- read_excel("FieldExperiment.xlsx")
+fexpkey <- data.frame(fexpkey)
+fexpkey$DATE <- as.Date(fexpkey$DATE)
+fexpkey$WEEK <- factor(fexpkey$WEEK)
 
 test_that("Q2 (visible)", {
   
@@ -99,7 +98,7 @@ test_that("Q10 (visible)", {
   
 })
 
-Q12key <- ggplot(fexp, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
+Q12key <- ggplot(fexpkey, aes(x = AMAZON_US_SALES, y = SHOPIFY_US_SALES)) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10()
@@ -113,7 +112,7 @@ test_that("Q12 (visible)", {
   
 })
 
-Q13key <- fexp %>% 
+Q13key <- fexpkey %>% 
   filter(POPN > 500000) %>% 
   group_by(WEEK, DMA_NAME) %>% 
   summarize(WebSales = sum(SHOPIFY_US_SALES),
@@ -132,7 +131,7 @@ test_that("Q13 (visible)", {
   
 })
 
-Q14key <- fexp %>% 
+Q14key <- fexpkey %>% 
   filter(POPN > 500000) %>% 
   group_by(WEEK, DMA_NAME) %>% 
   summarize(WebSales = sum(SHOPIFY_US_SALES),
@@ -151,7 +150,7 @@ test_that("Q14 (visible)", {
   
 })
 
-Q15key <- fexp %>% 
+Q15key <- fexpkey %>% 
   filter(DMA_NAME == "New York, NY") %>% 
   ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
   geom_line()
@@ -165,7 +164,7 @@ test_that("Q15 (visible)", {
   
 })
 
-Q16key <- fexp %>% 
+Q16key <- fexpkey %>% 
   filter(POPN > 2500000) %>% 
   ggplot(aes(x = DATE, y = SHOPIFY_US_SALES, color = DMA_NAME)) +
   geom_line()
@@ -179,7 +178,7 @@ test_that("Q16 (visible)", {
   
 })
 
-Q17key <- fexp %>% 
+Q17key <- fexpkey %>% 
   filter(POPN > 1300000) %>% 
   ggplot(aes(x = DATE, y = SHOPIFY_US_SALES)) +
   geom_line() +
@@ -194,7 +193,7 @@ test_that("Q17 (visible)", {
   
 })
 
-Q18key <- fexp %>% 
+Q18key <- fexpkey %>% 
   filter(POPN > 1300000) %>% 
   group_by(DMA_NAME) %>% 
   summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
@@ -210,7 +209,7 @@ test_that("Q18 (visible)", {
   
 })
 
-Q19key <- fexp %>% 
+Q19key <- fexpkey %>% 
   group_by(DMA_NAME) %>% 
   summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
   ggplot(aes(x = Tot_Sales)) +
@@ -225,7 +224,7 @@ test_that("Q19 (visible)", {
   
 })
 
-Q20key <- fexp %>% 
+Q20key <- fexpkey %>% 
   group_by(DMA_NAME) %>% 
   summarize(Tot_Sales = sum(SHOPIFY_US_SALES)) %>% 
   ggplot(aes(x = Tot_Sales)) +
@@ -241,7 +240,7 @@ test_that("Q20 (visible)", {
   
 })
 
-Q21key <- fexp %>% 
+Q21key <- fexpkey %>% 
   filter(POPN > 2400000) %>% 
   ggplot(aes(x = DMA_NAME, y = AMAZON_US_SALES)) +
   geom_boxplot()
